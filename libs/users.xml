@@ -1,0 +1,18 @@
+<object-stream>
+  <java.util.HashMap_-Values>
+    <outer-class>
+      <entry>
+        <long>1</long>
+        <models.User>
+          <fName>marie</fName>
+          <lName>don</lName>
+          <job>clown</job>
+          <age>12</age>
+          <gender>F</gender>
+          <userID>1</userID>
+          <movies/>
+        </models.User>
+      </entry>
+    </outer-class>
+  </java.util.HashMap_-Values>
+</object-stream>

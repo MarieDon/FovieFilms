@@ -1,0 +1,101 @@
+<object-stream>
+  <java.util.Stack serialization="custom">
+    <unserializable-parents/>
+    <vector>
+      <default>
+        <capacityIncrement>0</capacityIncrement>
+        <elementCount>10</elementCount>
+        <elementData>
+          <map>
+            <entry>
+              <long>1</long>
+              <models.User>
+                <fName>Leonard</fName>
+                <lName>Hernandez</lName>
+                <job>technician</job>
+                <age>24</age>
+                <gender>M</gender>
+                <userID>1</userID>
+                <movies/>
+              </models.User>
+            </entry>
+            <entry>
+              <long>2</long>
+              <models.User>
+                <fName>Melody</fName>
+                <lName>Roberson</lName>
+                <job>other</job>
+                <age>53</age>
+                <gender>F</gender>
+                <userID>2</userID>
+                <movies>
+                  <entry>
+                    <long>1</long>
+                    <models.Movies>
+                      <title>22</title>
+                      <url>;&apos;</url>
+                      <year>k</year>
+                      <movieID>1</movieID>
+                      <movie/>
+                    </models.Movies>
+                  </entry>
+                </movies>
+              </models.User>
+            </entry>
+            <entry>
+              <long>3</long>
+              <models.User>
+                <fName>Gregory</fName>
+                <lName>Newton</lName>
+                <job>writer</job>
+                <age>23</age>
+                <gender>M</gender>
+                <userID>3</userID>
+                <movies/>
+              </models.User>
+            </entry>
+            <entry>
+              <long>4</long>
+              <models.User>
+                <fName>Oliver</fName>
+                <lName>George</lName>
+                <job>technician</job>
+                <age>24</age>
+                <gender>M</gender>
+                <userID>4</userID>
+                <movies/>
+              </models.User>
+            </entry>
+            <entry>
+              <long>5</long>
+              <models.User>
+                <fName>Jenna</fName>
+                <lName>Parker</lName>
+                <job>other</job>
+                <age>33</age>
+                <gender>F</gender>
+                <userID>5</userID>
+                <role>admin</role>
+                <movies/>
+              </models.User>
+            </entry>
+          </map>
+          <map>
+            <entry>
+              <long>1</long>
+              <models.Movies reference="../../../map/entry[2]/models.User/movies/entry/models.Movies"/>
+            </entry>
+          </map>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+        </elementData>
+      </default>
+    </vector>
+  </java.util.Stack>
+</object-stream>

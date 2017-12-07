@@ -1,0 +1,17 @@
+<object-stream>
+  <map>
+    <entry>
+      <long>1</long>
+      <models.User>
+        <fName>marie</fName>
+        <lName>don</lName>
+        <job>clown</job>
+        <age>12</age>
+        <gender>F</gender>
+        <userID>1</userID>
+        <movies/>
+      </models.User>
+    </entry>
+  </map>
+  <map/>
+</object-stream>
