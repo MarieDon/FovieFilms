@@ -19,7 +19,7 @@ public class Main implements ShellDependent {
 	  
 	public FovieInterface fovie;
 	public Main() throws Exception {
-		File movies = new File ("./libs/users1234.xml");
+		File movies = new File ("./libs/users5.xml");
 		Serializer serializer = new XMLSerializer(movies);
 		fovie= new FovieAPI(serializer);
 		if (movies.isFile()) 
@@ -33,12 +33,13 @@ public class Main implements ShellDependent {
 	  }
 	
 	
+	
 
 
 	@Command(description = "Log in")
 	  public void logIn(@Param(name = "userId") Long userid, @Param(name = "Last name") String lastName)
 	      throws IOException {
-
+	
 	    if (fovieApi.login(userid, lastName) && fovieApi.currentUser.isPresent()) {
 	      User user = fovieApi.currentUser.get();
 	      System.out.println("You are logged in as " + user.fName);

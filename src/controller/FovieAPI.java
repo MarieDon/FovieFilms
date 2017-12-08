@@ -22,6 +22,10 @@ public class FovieAPI implements FovieInterface {
 	private Map<String, User> name = new HashMap<>();
 	private Map<Long, Ratings> ratingIndex = new HashMap<>();
 	Optional<User> currentUser;
+	
+	/*---------------------------
+	 * Constructors
+	 *--------------------------*/
 
 	public FovieAPI() {
 	}
@@ -29,11 +33,10 @@ public class FovieAPI implements FovieInterface {
 	public FovieAPI(Serializer serializer) {
 		this.serializer = serializer;
 	}
-
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#getUsers()
-	 */
 	
+	/*=============================
+	 * Getters
+	 * ==========================*/
 	
 	@Override
 	public Collection<User> getUsers() {
@@ -45,100 +48,54 @@ public class FovieAPI implements FovieInterface {
 		return moviesIndex.values();
 	}
 	
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#login(java.lang.Long, java.lang.String)
-	 */
-	@Override
-	public boolean login(Long userID, String lName) {
-	    Optional<User> user = Optional.fromNullable(userIndex.get(userID));
-	    if (user.isPresent() && user.get().lName.equals(lName)) {
-	      currentUser = user;    
-	      return true;
-	    }
-	    return false;
-	  }
-	
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#logout()
-	 */
-	@Override
-	public void logout() {
-	    Optional<User> user = currentUser;
-	    if (user.isPresent()) {
-	      currentUser = Optional.absent();
-	    }
-	  }
-
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#addUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public User addUser(String fName, String lName, String age, String gender, String job) {
-		User user = new User(fName, lName, age, gender, job);
-		userIndex.put(user.userID, user);
-		name.put(fName, user);
-		return user;
-	}
-
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#getUser(java.lang.Long)
-	 */
 	@Override
 	public User getUser(Long id)
 	{
 		return userIndex.get(id);
 	}
 	
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#getUserByName(java.lang.String)
-	 */
+
 	@Override
 	public User getUserByName(String fName) {
 		return name.get(fName);
 	}
-
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#deleteUsers()
-	 */
+	
 	@Override
-	public void deleteUsers() {
-		userIndex.clear();
+	public Movies getMovie(Long id) {
+		return moviesIndex.get(id);
 	}
-
-
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#removeUser(java.lang.Long)
-	 */
-	@Override
-	public void removeUser(Long userID) {
-			User user= userIndex.remove(userID);
-			name.remove(user.fName);
+	
+	public Collection<Ratings> getRatings()
+	{
+		return ratingIndex.values();
 	}
-
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#deleteUser(java.lang.String)
-	 */
-	@Override
-	public void deleteUser(String name) {
-		User user = userIndex.remove(name);
-		userIndex.remove(user.fName);
-		// userIndex.clear();
-		// users.clear();
+	
+	public Ratings getRating(long id)
+	{
+		return ratingIndex.get(id);
 	}
-
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#addMovie(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
-	 */
-
+	
+	public Map<Long, Ratings> getUserRating(long id)
+	{
+		Optional<User> user = Optional.fromNullable(userIndex.get(id));
+		return user.get().TheRatings;
+	}
+	
+	public Map<Long, Ratings> getMovieRating(long id)
+	{
+		Optional<Movies> movies = Optional.fromNullable(moviesIndex.get(id));
+		return movies.get().theratings;
+	}
+	
+	
+	/*-----------------------------------
+	 * Adders
+	 *----------------------------------*/
+	
 	public void addMovie(String title, String year, String url) {
 		Movies movie = new Movies(title, year, url);
 		moviesIndex.put(movie.movieID, movie);
 	}
-
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#addRating(java.lang.Long, java.lang.Long, int)
-	 */
-	
 	
 	
 	@Override
@@ -155,13 +112,45 @@ public class FovieAPI implements FovieInterface {
 	    }
 	}
 	
-
+	@Override
+	public User addUser(String fName, String lName, String age, String gender, String job) {
+		User user = new User(fName, lName, age, gender, job);
+		userIndex.put(user.userID, user);
+		name.put(fName, user);
+		return user;
+	}
+	
+	/*-------------------------------
+	 * Remove and Delete
+	 *-----------------------------*/
 	
 	@Override
-	public Movies getMovie(Long id) {
-		return moviesIndex.get(id);
+	public void deleteUsers() {
+		userIndex.clear();
 	}
 
+	@Override
+	public void removeUser(Long userID) {
+			User user= userIndex.remove(userID);
+			name.remove(user.fName);
+	}
+
+	@Override
+	public void deleteUser(String name) {
+		User user = userIndex.remove(name);
+		userIndex.remove(user.fName);
+	}
+
+	public void deleteRating(long id)
+	{
+		ratingIndex.remove(id);
+	}
+	
+	
+	/*-------------------------
+	 * Utilities
+	 *-----------------------*/
+	
 	@Override
 	public void initalLoad() throws IOException {
 		String delims = "[|]";
@@ -192,34 +181,60 @@ public class FovieAPI implements FovieInterface {
 				throw new IOException("Invalid member length: " + userTokens.length);
 			}
 		}
+		
+		scanner = new Scanner(new File("./libs/ratings5.dat"));
+		while (scanner.hasNextLine()) {
+			String userDetails = scanner.nextLine();
+			// parse user details string
+			String[] userTokens = userDetails.split(delims);
+
+			if (userTokens.length == 4) {
+				addMovie(userTokens[1], userTokens[2], userTokens[3]);
+			} else {
+				scanner.close();
+				throw new IOException("Invalid member length: " + userTokens.length);
+			}
+		}
 		scanner.close();
 	}
+	
+	@Override
+	public boolean login(Long userID, String lName) {
+	    Optional<User> user = Optional.fromNullable(userIndex.get(userID));
+	    if (user.isPresent() && user.get().lName.equals(lName)) {
+	      currentUser = user;    
+	      return true;
+	    }
+	    return false;
+	  }
+	
 
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#load()
-	 */
+	@Override
+	public void logout() {
+	    Optional<User> user = currentUser;
+	    if (user.isPresent()) {
+	      currentUser = Optional.absent();
+	    }
+	  }
+
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public void load() throws Exception {
 		serializer.read();
-		moviesIndex = (Map<Long, Movies>) serializer.pop();
 		userIndex = (Map<Long, User>) serializer.pop();
+		moviesIndex = (Map<Long, Movies>) serializer.pop();
+		ratingIndex = (Map<Long, Ratings>) serializer.pop();
+		
 	}
 
-	/* (non-Javadoc)
-	 * @see controller.FovieInterface#store()
-	 */
+	
 	@Override
 	public void store() throws Exception {
-		serializer.push(userIndex);
+		serializer.push(ratingIndex);
 		serializer.push(moviesIndex);
+		serializer.push(userIndex);	
 		serializer.write();
-	}
-
-	@Override
-	public void addRatings(Long id, Long userID, Long movieID, int ratings) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

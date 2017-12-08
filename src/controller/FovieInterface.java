@@ -35,8 +35,6 @@ public interface FovieInterface {
 
 	Movies getMovie(Long id);
 
-	void addRatings(Long id, Long userID, Long movieID, int ratings);
-
 	void initalLoad() throws IOException;
 
 	void load() throws Exception;

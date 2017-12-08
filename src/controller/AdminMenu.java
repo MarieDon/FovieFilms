@@ -1,100 +1,153 @@
 package controller;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
 import asg.cliche.Command;
 import asg.cliche.Param;
+import models.Movies;
 import models.User;
 
 public class AdminMenu {
 
 	  private String name;
 	  private User user;
-	  private FovieInterface fovieApi;
+	  private FovieAPI fovieApi;
 
-	  public AdminMenu(FovieInterface fovieApi, String userName) {
+	  public AdminMenu(FovieAPI fovieApi, String userName) {
 
 	    this.fovieApi = fovieApi;
 	    this.setName(userName);
 	  }
 
-	  @Command(description = "Get all users details")
-	  public void getUsers() {
-
-	    Collection<User> users = fovieApi.getUsers();
-	    System.out.println(users);
-
-	  }
-	  public String getName() {
-	    return name;
-	  }
-	  public void setName(String name) {
-	    this.name = name;
-	  }
-	  @Command(description = "Create a new User")
-	  public void createUser(@Param(name = "first name") String fName, @Param(name = "last name") String lName,
-	      @Param(name = "age") String age, @Param(name = "gender") String gender, @Param(name = "job") String job) {
-
-		  fovieApi.addUser(fName, lName, age, gender, job);
-
-	  }
-	  @Command(description = "Get a Users detail")
-	  public void getUser(@Param(name = "id") Long id) {
-
-	    User user = fovieApi.getUser(id);
-	    System.out.println(user);
-
-	  }
-//	  @Command(description = "Delete a User")
-//	  public void deleteUser(@Param(name = "email") String Name) {
-//
-//	    Optional<User> user = Optional.fromNullable(fovieApi.deleteUser(Name));
-//	    if (user.isPresent()) {
-//	    	fovieApi.deleteUser(user.get().userID);
-//	    }
-//	  }
+	  /*=================================
+		 * Users
+		 ================================*/
+			  
+	  public String getName()
+	  	{
+		  return name;
+	  	}
 	  
+	  public void setName(String name)
+	  {
+		  this.name=name;
+	  }
 	  
-	  @Command(description = "Add an activity")
-	  public void addMovie(@Param(name = "title") String title, @Param(name = "year") String year,
+		  /*TreeSet instead of hash map, easier to use*/
+		  @Command(description = "Get users and sort by full name")
+		  public void GetAllUsers() {
+			  TreeSet<User> sortedUsers = new TreeSet<User>();
+				sortedUsers.addAll(fovieApi.getUsers());
+				Iterator<User> iteratoR = sortedUsers.iterator();
+				while(iteratoR.hasNext()) {
+					User usrs = iteratoR.next();
+					System.out.println(usrs.lName + " " + usrs.fName);  
+		  }
+		  }
+
+		  @Command(description = "Get a Users detail")
+		  public void getUser(@Param(name = "userID") Long id) {
+		    User user = fovieApi.getUser(id);
+		    System.out.println(user);
+		  }
+		  
+		  @Command(description = "Create a new user")
+		  public void CreateUser(@Param(name = "first name") String fName, @Param(name = "last name") String lName, 
+		  @Param(name = "age") String age, @Param(name = "gender") String gender, @Param(name = "job") String job)
+				  {
+			  fovieApi.addUser(fName, lName, age, gender, job);
+				  }
+		  
+		  @Command(description = "Search user by name")
+		  public void getUserByName(String name) 
+		  {
+			  int i =0;
+			  ArrayList<User> users = new ArrayList<User>();
+			  users.addAll(fovieApi.getUsers());
+			  while( i < users.size())
+			  {
+				  if(users.get(i).fName.toUpperCase().contains(name.toUpperCase()))
+				  {
+					  System.out.println(users.get(i));
+				  }
+				  i++;
+			  }
+		  }
+		  	  
+		   
+		  /*=================================
+			 * Movies
+		    ================================*/
+		  
+		  @Command(description = "Add Movie")
+		  public void addMovies(@Param(name = "title") String title, @Param(name = "year") String year,
 		      @Param(name = "url") String url) {
 		    fovieApi.addMovie(title, year, url);
-	  }
-	  
-	  /*TreeSet instead of hash map, easier to use*/
-	  @Command(description = "Get users and sort by full name")
-	  public void GetAllUsers() {
-		  TreeSet<User> sortedUsers = new TreeSet<User>();
-			sortedUsers.addAll(fovieApi.getUsers());
-			Iterator<User> iteratoR = sortedUsers.iterator();
-			while(iteratoR.hasNext()) {
-				User usrs = iteratoR.next();
-				System.out.println(usrs.lName + " " + usrs.fName);  
-	  }
-	  }
-	  
-//	//TreeSet instead of hash map, easier to use. Iterator is for loop using collections//
-//	  @Command(description = "Get movies and sort by year")
-//	  public void GetAllMovies() {
-//		  TreeSet<Movies> sortedMovies = new TreeSet<Movies>();
-//			sortedMovies.addAll(fovieApi.getMovies());
-//			Iterator<Movies> iteratoR = sortedMovies.iterator();
-//			while(iteratoR.hasNext()) {
-//				Movies moviE = iteratoR.next();
-//				System.out.println(moviE.year);  
-//	  }
-//	  }
-	  
-	  
-	  
-//	  @Command(description = "Add a Rating to Movie")
-//	  public void addRatings(@Param(name = "movieID") Long movieID, @Param(name = "userID") Long userID,
-//	      @Param(name = "longitude") float longitude) {
-//	    Optional<Movies> movies = Optional.fromNullable(fovieApi.getMovie(movieID));
-//	    if (movies.isPresent()) {
-//	    	fovieApi.addRatings(movies.get().movieID, userID, movieID, ratings);
-//	    }
-//	  }
+		  }
+		  
+			//TreeSet instead of hash map, easier to use. Iterator is for loop using collections//
+		  @Command(description = "Get movies and sort by title")
+		  public void getAllMovies() {
+			  TreeSet<Movies> sortedMovies = new TreeSet<Movies>();
+				sortedMovies.addAll(fovieApi.getMovies());
+				Iterator<Movies> iteratoR = sortedMovies.iterator();
+				System.out.println("List of movies sorted by the title and released date");
+				while(iteratoR.hasNext()) {
+					Movies moviE = iteratoR.next();
+					System.out.println("Title: " + moviE.title + " " + "Released Date: " +moviE.year);  
+		  }
+		  }
+		  
+		  @Command(description = "Get a movie by ID")
+		  public Movies getMovie(@Param(name = "Movie ID") Long id)
+		  {
+		    return fovieApi.getMovie(id);
+		  }
+		  
+		  
+		  /*=================================
+		   * Ratings
+		   ================================*/
+		  
+		  @Command(description = "Add a ratings")
+		  public void addRatings(@Param(name = "userID") Long userID,
+		      @Param(name = "movieID") Long movieID,  @Param(name = "rating") int ratings) {
+		      fovieApi.addRating(userID, movieID, ratings);
+		  }
+		
+		    
+		  @Command(description = "Get user ratings")
+		  public void getUserRatings(@Param(name = "User ID") long id)
+		  {
+			  System.out.println(fovieApi.getUserRating(id)); 
+		  }
+		  
+		  @Command(description = "Get movie ratings")
+		  public void getMovieRatings(@Param(name = "Movie ID") Long id)
+		  {
+			   System.out.println(fovieApi.getMovieRating(id)); 
+		  }
+		  
+		  @Command(description = "Get a ratings")
+		  public void getRatings(@Param(name = "Rating ID") Long id)
+		  {
+			  System.out.println(fovieApi.getRating(id)); 
+		  }
+		  
+		  
+		  @Command(description = "Get all ratings")
+		 public void getRatings()
+		  {
+			 System.out.println(fovieApi.getRatings()); 
+		  }
+		  
+		  @Command(description = "Delete a ratings")
+		  public void deleteRating(@Param(name = "Rating ID") Long id)
+		  {
+				  fovieApi.deleteRating(id);
+		  }
+		  
+		  
 	}
