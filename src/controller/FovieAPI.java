@@ -23,9 +23,9 @@ public class FovieAPI implements FovieInterface {
 	private Map<Long, Ratings> ratingIndex = new HashMap<>();
 	Optional<User> currentUser;
 	
-	/*---------------------------
+	/*============================
 	 * Constructors
-	 *--------------------------*/
+	 *==========================*/
 
 	public FovieAPI() {
 	}
@@ -88,9 +88,9 @@ public class FovieAPI implements FovieInterface {
 	}
 	
 	
-	/*-----------------------------------
+	/*====================================
 	 * Adders
-	 *----------------------------------*/
+	 *==================================*/
 	
 	public void addMovie(String title, String year, String url) {
 		Movies movie = new Movies(title, year, url);
@@ -120,9 +120,9 @@ public class FovieAPI implements FovieInterface {
 		return user;
 	}
 	
-	/*-------------------------------
+	/*===============================
 	 * Remove and Delete
-	 *-----------------------------*/
+	 *=============================*/
 	
 	@Override
 	public void deleteUsers() {
@@ -147,9 +147,9 @@ public class FovieAPI implements FovieInterface {
 	}
 	
 	
-	/*-------------------------
+	/*=========================
 	 * Utilities
-	 *-----------------------*/
+	 *=======================*/
 	
 	@Override
 	public void initalLoad() throws IOException {

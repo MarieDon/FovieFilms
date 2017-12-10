@@ -21,10 +21,10 @@ public class Main implements ShellDependent {
 	public Main() throws Exception {
 		File movies = new File ("./libs/users5.xml");
 		Serializer serializer = new XMLSerializer(movies);
-		fovie= new FovieAPI(serializer);
+		fovieApi= new FovieAPI(serializer);
 		if (movies.isFile()) 
 		{
-			fovie.load();
+			fovieApi.load();
 		}
 	}
 	
@@ -32,10 +32,6 @@ public class Main implements ShellDependent {
 	    this.theShell = theShell;
 	  }
 	
-	
-	
-
-
 	@Command(description = "Log in")
 	  public void logIn(@Param(name = "userId") Long userid, @Param(name = "Last name") String lastName)
 	      throws IOException {
